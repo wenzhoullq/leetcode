@@ -106,3 +106,35 @@ class Solution {
     }
 }
 ```
+## 354. 俄罗斯套娃信封问题
+给你一个二维整数数组 envelopes ，其中 envelopes[i] = [wi, hi] ，表示第 i 个信封的宽度和高度。
+
+当另一个信封的宽度和高度都比这个信封大的时候，这个信封就可以放进另一个信封里，如同俄罗斯套娃一样。
+
+请计算 最多能有多少个 信封能组成一组“俄罗斯套娃”信封（即可以把一个信封放到另一个信封里面）。
+
+注意：不允许旋转信封。
+### 思路
+二维的LST问题，主要是排序问题，对长度进行升序，但是对**长度相同宽度不同**的进行降序，这样就可以避免长度相同的信封的重复
+```java
+class Solution {
+    public int maxEnvelopes(int[][] envelopes) {
+        Arrays.sort(envelopes,(x,y)->x[0]!=y[0]?x[0]-y[0]:y[1]-x[1]);
+        int length=0;
+        int[] tail=new int[envelopes.length];
+        for(int i=0;i<envelopes.length;i++){
+            // while(i+1<envelopes.length&&envelopes[i][0]==envelopes[i+1][0]) continue;
+            int left=0,right=length;
+            while(left<right){
+                int mid=(left+right)/2;
+                if(envelopes[i][1]>tail[mid]) left=mid+1;
+                else right=mid;
+            }
+            tail[left]=envelopes[i][1];
+            if(right==length) length++;
+            
+        }
+        return length;
+    }
+}
+```
