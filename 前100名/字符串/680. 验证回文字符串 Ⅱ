@@ -1,0 +1,27 @@
+## 题目
+给定一个非空字符串 s，最多删除一个字符。判断是否能成为回文字符串。
+## 思路
+贪心，如果出现不满足条件且还没删除过，那么就对它的子序列进行判断
+```java
+class Solution {
+    boolean flag=true;
+    public boolean validPalindrome(String s) {
+        int left=0,right=s.length()-1;
+        while(left<right){
+            if(s.charAt(left)==s.charAt(right)){
+                left++;
+                right--;
+            }
+            else{
+                if(flag){
+                    flag=false;
+                    int length=right-left;
+                    return validPalindrome(s.substring(left,left+length))||validPalindrome(s.substring(left+1,left+1+length));
+                } 
+                else return false;
+            }
+        }
+        return true;
+    }
+}
+```
