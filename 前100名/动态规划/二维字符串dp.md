@@ -1,3 +1,6 @@
+## 模板
+出现两个字符串，且返回的是boolean/int，画表格，填数字，然后看怎么得到
+
 * 072.编辑距离
 ## 题目
 给你两个单词 word1 和 word2，请你计算出将 word1 转换成 word2 所使用的最少操作数 。
@@ -75,5 +78,33 @@ class Solution {
         return ans;
     }
 }
-
 ```
+* 115.不同的子序列
+## 题目
+给定一个字符串 s 和一个字符串 t ，计算在 s 的子序列中 t 出现的个数。
+
+字符串的一个 子序列 是指，通过删除一些（也可以不删除）字符且不干扰剩余字符相对位置所组成的新字符串。（例如，"ACE" 是 "ABCDE" 的一个子序列，而 "AEC" 不是）
+
+题目数据保证答案符合 32 位带符号整数范围。
+## 思路
+二维填表DP
+```java
+class Solution {
+    public int numDistinct(String s, String t) {
+        int[][] dp=new int[t.length()+1][s.length()+1];
+        for(int i=0;i<s.length();i++) dp[0][i]=1;
+        for(int i=1;i<=t.length();i++){
+            char c1=t.charAt(i-1);
+            for(int j=1;j<=s.length();j++){
+                if(c1==s.charAt(j-1)){
+                     dp[i][j]+=dp[i-1][j-1]+dp[i][j-1];
+                    //  System.out.println(dp[i][j]);
+                }
+                else dp[i][j]=dp[i][j-1];
+            }
+        }
+        return dp[t.length()][s.length()];
+    }
+}
+```
+
