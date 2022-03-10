@@ -111,7 +111,7 @@ class Solution {
                 pre=root.left;
                 while(pre.right!=null) pre=pre.right;
                 pre.right=root;
-                TreeNode temp=root;
+                TreeNode temp=root;//重点在于与原树的切割
                 root=root.left;
                 temp.left=null;
             }
