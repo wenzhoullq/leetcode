@@ -172,3 +172,53 @@ class Solution {
 }
 
 ```
+* 1293. 网格中的最短路径
+## 题目
+给你一个 m * n 的网格，其中每个单元格不是 0（空）就是 1（障碍物）。每一步，您都可以在空白单元格中上、下、左、右移动。
+
+如果您 最多 可以消除 k 个障碍物，请找出从左上角 (0, 0) 到右下角 (m-1, n-1) 的最短路径，并返回通过该路径所需的步数。如果找不到这样的路径，则返回 -1 。
+## 思路
+关键词最短，用BFS；值得注意的是，当访问节点时候，剩余k次访问和剩余k-m次访问是不一样，破墙的情况不一样，因此visit需要三重
+```java
+class Solution {
+    class step{
+        int y;
+        int x;
+        int k;
+        step(int y,int x,int k){
+            this.y=y;
+            this.x=x;
+            this.k=k;
+        }
+    }
+    public int shortestPath(int[][] grid, int k) {
+        Queue<step> q=new LinkedList<>();
+        int lengthy=grid.length,lengthx=grid[0].length;
+        if(lengthy+lengthx-2<=k) return lengthy+lengthx-2;
+        int count=0;
+        int[][] direct={{0,1},{1,0},{0,-1},{-1,0}};
+        boolean[][][] visit=new boolean[lengthy][lengthx][k+1];
+        q.add(new step(0,0,k));
+        while(!q.isEmpty()){
+            int length=q.size();
+            for(int i=0;i<length;i++){
+                step temp=q.poll();
+                int y=temp.y,x=temp.x;
+                if(x==lengthx-1&&y==lengthy-1) return count;
+                if(visit[y][x][temp.k]) continue;
+                visit[y][x][temp.k]=true;
+                for(int num=0;num<4;num++){
+                    int tempy=y+direct[num][0],tempx=x+direct[num][1];
+                    if(tempy<lengthy&&tempx<lengthx&&tempx>=0&&tempy>=0){
+                        int tempk=temp.k;
+                        if(grid[tempy][tempx]==1) tempk--;
+                        if(tempk>=0) q.add(new step(tempy,tempx,tempk));
+                   }
+                }
+            }
+            count++;
+        }
+        return -1;
+    }
+}
+```
