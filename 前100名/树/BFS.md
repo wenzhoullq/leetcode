@@ -222,3 +222,64 @@ class Solution {
     }
 }
 ```
+* 994.腐烂的橘子
+
+## 题目
+在给定的 m x n 网格 grid 中，每个单元格可以有以下三个值之一：
+
+值 0 代表空单元格；
+值 1 代表新鲜橘子；
+值 2 代表腐烂的橘子。
+每分钟，腐烂的橘子 周围 4 个方向上相邻 的新鲜橘子都会腐烂。
+
+返回 直到单元格中没有新鲜橘子为止所必须经过的最小分钟数。如果不可能，返回 -1 。
+## 思路
+关键词 最小
+```java
+class Solution {
+    class point{
+        int x;
+        int y;
+        point(int y,int x){
+            this.y=y;
+            this.x=x;
+        }
+    }
+    public int orangesRotting(int[][] grid) {
+        Queue<point> q=new LinkedList<>();
+        int lengthy=grid.length,lengthx=grid[0].length;
+        boolean[][] visit=new boolean[lengthy][lengthx];
+        int rear=0;
+        int[][] direct={{0,1},{0,-1},{1,0},{-1,0}};
+        for(int i=0;i<lengthy;i++){
+            for(int j=0;j<lengthx;j++){
+                if(grid[i][j]==2){
+                    q.add(new point(i,j));
+                    visit[i][j]=true;
+                    
+                } 
+                else if(grid[i][j]==1){
+                    rear++;
+                }
+            }
+        }
+        if(rear==0) return 0;
+        int time=-1;
+        while(!q.isEmpty()){
+            int size=q.size();
+            for(int i=0;i<size;i++){
+                point temp=q.poll();
+                for(int j=0;j<4;j++){
+                    int tempy=temp.y+direct[j][0],tempx=temp.x+direct[j][1];
+                    if(tempx<0||tempx==lengthx||tempy<0||tempy==lengthy||visit[tempy][tempx]||grid[tempy][tempx]==0) continue;          
+                    visit[tempy][tempx]=true;
+                    rear--;
+                    q.add(new point(tempy,tempx));
+                }
+            }
+            time++;
+        }
+        return rear==0?time:-1;
+    }
+}
+```
